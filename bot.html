@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Voice Q&A</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <style>
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="bot-container">
+        <div class="bot-section">
+            <div class="bot-header">
+                <h2>Voice Chatbot</h2>
+            </div>
+            <div class="bot-body">
+                <button id="speech" class="btn">
+                    <i class="fa fa-microphone" aria-hidden="true"></i>
+                    <div class="" id="show-blink"></div>
+                </button>
+                <button class="start-btn" id="start-btn">Start Chat</button>
+            </div>
+            <div class="bot-footer">
+                <p>Powered by js</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="bot.js"></script>
+    <script>
+
+        const qaData = [
+            { question: 'What is your name?', answer: 'My name is Bot.' },
+            { question: 'Hello', answer: 'My name is Bot.' },
+            { question: 'I like you?', answer: 'So pleased to hear that.' },
+            { question: 'How are you doing?', answer: 'I am doing well, thank you!' },
+            { question: 'What time is it?', answer: `I don't have access to real-time information.` }
+        ];
+        function startListening() {
+            $("#show-blink").addClass("pulse-ring");
+            const recognition = new webkitSpeechRecognition();
+            const timeoutDuration = 5000; // 5 seconds
+            let speechTimeout;
+
+            recognition.onstart = function () {
+                speechTimeout = setTimeout(function () {
+                    speak("No speech detected. Please try again.");
+                    recognition.stop();
+                }, timeoutDuration);
+            };
+
+            recognition.onresult = function (event) {
+                clearTimeout(speechTimeout);
+                const userText = event.results[0][0].transcript.toLowerCase();
+                respondToUser(userText);
+            };
+
+            recognition.onerror = function (event) {
+                clearTimeout(speechTimeout);
+                speak("Speech recognition error. Please try again.");
+            };
+            recognition.onend = function () {
+                clearTimeout(speechTimeout);
+            };
+            recognition.start();
+        }
+
+
+
+        function respondToUser(userText) {
+            let botResponse = "I'm sorry, I didn't quite understand that.";
+            if (userText != "") {
+                answered++;
+            }
+            speak(questionData[answered].question);
+            setTimeout(function () {
+                $("#show-blink").removeClass("pulse-ring");
+                startListening();
+            }, 3000);
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = text;
+            speechSynthesis.speak(utterance);
+
+        }
+    </script>
+</body>
+
+</html>
