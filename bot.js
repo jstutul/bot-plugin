@@ -25,8 +25,69 @@ const questionData = [
     { sl: 6, question: "Are you married, single, divorced or separated." },
     { sl: 7, question: "Do you smoke, If so how much." },
     { sl: 8, question: "Do you drink alcohol? if so how much." },
+    { sl: 9, question: "Nice to talk with you. Thanks for your support." },
+    { sl: 10, question: "Bye." },
 ];
+function startListening() {
+    $("#show-blink").addClass("pulse-ring");
+    const recognition = new webkitSpeechRecognition();
+    const timeoutDuration = 6000; // 5 seconds
+    let speechTimeout;
+
+    recognition.onstart = function () {
+        speechTimeout = setTimeout(function () {
+            speak("No speech detected. Please try again.");
+            recognition.stop();
+        }, timeoutDuration);
+    };
+
+    recognition.onresult = function (event) {
+        clearTimeout(speechTimeout);
+        const userText = event.results[0][0].transcript.toLowerCase();
+        if (userText != "") {
+            getVoice();
+        }
+        respondToUser(userText);
+    };
+
+    recognition.onerror = function (event) {
+        clearTimeout(speechTimeout);
+        speak("Speech recognition error. Please try again.");
+    };
+    recognition.onend = function () {
+        clearTimeout(speechTimeout);
+    };
+    recognition.start();
+}
+
+function respondToUser() {
+    speak(questionData[answered].question);
+}
+
+function getVoice() {
+    answered++;
+    $("#start-btn").attr("data-count", answered);
+    $("#show-blink").removeClass("pulse-ring");
+}
+function speak(text, c = 0) {
+    const utterance = new SpeechSynthesisUtterance();
+    utterance.text = text;
+
+    $("#show-blink").removeClass("pulse-ring");
+    utterance.onend = function () {
+        if (answered == 10) {
+            window.location.reload();
+        } else {
+            startListening();
+        }
+    };
+    setTimeout(function () {
+        speechSynthesis.speak(utterance);
+    }, 1000);
+}
+
 var answered = 0;
+var mute = 0;
 $(document).ready(function () {
     $(document).on("click", "#chat-circle", function () {
         $(".chatbot").toggleClass("bot-hide");
@@ -41,21 +102,15 @@ $(document).ready(function () {
 
     $(document).on("click", ".bot-action.act,.act-btn", function () {
         var iden = $("#identificationNo").val();
-        
-        if (iden == '') {
+        if (iden == "") {
             alert("Enter patient identification no");
             return false;
-        }else{
+        } else {
             window.location = "/bot.html";
         }
-
     });
     $(document).on("click", "#start-btn", function () {
-        $("#show-blink").addClass("pulse-ring");
-        speak(questionData[0].question);
-        setTimeout(function () {
-            $("#show-blink").removeClass("pulse-ring");
-            startListening();
-        }, 3000);
+        var count = $("#start-btn").attr("data-count");
+        speak(questionData[count].question);
     });
 });
