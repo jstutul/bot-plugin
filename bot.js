@@ -110,7 +110,7 @@ $(document).ready(function () {
             alert("Enter patient identification no");
             return false;
         } else {
-            window.location = "/bot.html";
+            window.location = "/index.html";
         }
     });
     $(document).on("click", "#start-btn", function () {
