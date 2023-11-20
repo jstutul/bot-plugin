@@ -46,8 +46,8 @@ $(document).ready(function () {
             alert("Enter patient identification no");
             return false;
         }
-        $(".bot-body #identificationNo").val("");
-        window.location = "/bot.html";
+        // $(".bot-body #identificationNo").val("");
+        // window.location = "/bot.html";
     });
     $(document).on("click", "#start-btn", function () {
         $("#show-blink").addClass("pulse-ring");
