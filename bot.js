@@ -40,14 +40,15 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".bot-action.act,.act-btn", function () {
-        var iden = $(".bot-body #identificationNo").val();
-        console.log(iden);
-        if (iden == "") {
+        var iden = $("#identificationNo").val();
+        
+        if (iden == '') {
             alert("Enter patient identification no");
             return false;
+        }else{
+            window.location = "/bot.html";
         }
-        // $(".bot-body #identificationNo").val("");
-        // window.location = "/bot.html";
+
     });
     $(document).on("click", "#start-btn", function () {
         $("#show-blink").addClass("pulse-ring");
