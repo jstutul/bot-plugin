@@ -41,6 +41,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".bot-action.act,.act-btn", function () {
         var iden = $(".bot-body #identificationNo").val();
+        console.log(iden);
         if (iden == "") {
             alert("Enter patient identification no");
             return false;
