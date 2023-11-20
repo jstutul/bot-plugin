@@ -238,6 +238,7 @@
     .chatbot {
         width: 90%;
         height: 50%;
+        right: 5%;
     }
     .md-time {
         right: 45% !important;
