@@ -52,7 +52,6 @@ function startListening() {
 
     recognition.onerror = function (event) {
         clearTimeout(speechTimeout);
-        answered = 10;
         speak("Speech recognition error. Please try again.");
     };
     recognition.onend = function () {
@@ -60,7 +59,10 @@ function startListening() {
     };
     recognition.start();
 }
-
+function stopListening() {
+    const recognition = new webkitSpeechRecognition();
+    recognition.stop();
+}
 function respondToUser() {
     speak(questionData[answered].question);
 }
@@ -83,6 +85,7 @@ function speak(text, c = 0) {
         }
     };
     setTimeout(function () {
+        stopListening();
         speechSynthesis.speak(utterance);
     }, 1000);
 }
@@ -112,6 +115,7 @@ $(document).ready(function () {
     });
     $(document).on("click", "#start-btn", function () {
         var count = $("#start-btn").attr("data-count");
+        stopListening();
         speak(questionData[count].question);
     });
 });
