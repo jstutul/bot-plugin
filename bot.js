@@ -52,6 +52,7 @@ function startListening() {
 
     recognition.onerror = function (event) {
         clearTimeout(speechTimeout);
+        answered = 10;
         speak("Speech recognition error. Please try again.");
     };
     recognition.onend = function () {
