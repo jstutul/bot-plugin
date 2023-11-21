@@ -58,4 +58,22 @@ $(document).ready(function () {
             startListening();
         }, 3000);
     });
+
+    $(document).on('submit','#btnSubmit',function(){
+        var docType=$("#txtDocumentType option:selected").val();
+        if(docType=="0"){
+            $.alert.open("error","Select a document type.");
+            return false;
+        }
+
+        var documentInput = $('#filedocument');
+        var documentfile = documentInput[0].files[0];
+
+        if (documentfile && documentfile.type !== 'application/pdf') {
+            $.alert.open("error","Select a pdf type document.");
+            return false;
+        }
+        console.log("submit");
+    });
 });
+
