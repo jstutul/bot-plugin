@@ -110,30 +110,13 @@ $(document).ready(function () {
             alert("Enter patient identification no");
             return false;
         } else {
-            window.location = "/index.html";
+            window.location = "/bot.html";
         }
     });
     $(document).on("click", "#start-btn", function () {
         var count = $("#start-btn").attr("data-count");
         stopListening();
         speak(questionData[count].question);
-    });
-
-    $(document).on('submit','#btnSubmit',function(){
-        var docType=$("#txtDocumentType option:selected").val();
-        if(docType=="0"){
-            $.alert.open("error","Select a document type.");
-            return false;
-        }
-
-        var documentInput = $('#filedocument');
-        var documentfile = documentInput[0].files[0];
-
-        if (documentfile && documentfile.type !== 'application/pdf') {
-            $.alert.open("error","Select a pdf type document.");
-            return false;
-        }
-        console.log("submit");
     });
 });
 
